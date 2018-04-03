@@ -1,0 +1,10 @@
+.tombstone-stack{
+}
+
+.tombstone-stack .message.tombstone .place-holder-text{
+	margin-top: 2px;
+	display: block;
+	width: 100%;
+	background-color: #D2DADD;
+	height: 10px;
+}
