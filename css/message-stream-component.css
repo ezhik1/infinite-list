@@ -96,25 +96,6 @@
 	margin-left: 100px;
 }
 
-.debug-panel{
-	opacity: 0;
-	position: fixed;
-	top: 100px;
-	margin-left: 100px;
-}
-
-.debug-panel button{
-	border-radius: 3px;
-	background-color: #E3EEF5;
-	border-color: #a3bfc5;
-	color: #929BB2;
-}
-
-.debug-panel button:hover{
-	cursor: pointer;
-	background-color: #a3bfc5;
-}
-
 .message-animation {
 	padding-top: 40px;
 }

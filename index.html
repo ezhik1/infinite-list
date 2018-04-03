@@ -30,7 +30,7 @@
 
 					</aside>
 
-					<p>Documents grow, shrink, and mutate in ways far more engaging than what was likely ever conceived for early <i>web-browsing</i>. In that spirit, we need not be afraid of getting a bit exotic with the way we present classic constructs in our web-pages.</p>
+					<p>Documents grow, shrink, and mutate in ways far more engaging than what was likely ever conceived for early <i>web-browsing</i>. In modern spirit, we need not be afraid of getting a bit exotic with the way we present classic constructs in our web-pages.</p>
 
 					<aside class="row example-row intro-paragraph">
 
@@ -114,17 +114,20 @@
 						<li>The browser window, or container of our elements usually takes care of hiding/showing elements—we need only supply elements.</li>
 					</ul>
 					<aside class="row example-row">
+
 						<div class="message-animation col-lg-2 offset-lg-2 col-md-2 offset-md-2 col-sm-6 offset-sm-3 col-6 offset-3" data-direction="scroll"></div>
-						<div class="col-lg-6 offset-lg-2 col-md-6 offset-md-1 col-sm-12">
+						<div class="col-lg-6 offset-lg-2 col-md-6 offset-md-1 col-12">
 							<p>We can infer from the last point, that we never need what we don't see in the viewport, which means we can ignore those nodes entirely, as we scroll down the page. Ignoring nodes, usually means relying on the viewport to obscure them from the current scroll position. This is brilliantly simple, but it's a mechanism we take for-granted.</p>
 
 							<p>When we consider performance for a long list, the amount of nodes in the document becomes the apparent bottleneck. Sure, the browser obscures those nodes just fine, but they are still written to memory, they are still there, and they <i>will</i> affect rendering of new ones when there are enough existing elements in the DOM. So, if we reduce the amount of nodes, and not rely on the viewport to hide/show elements, the burden shifts to the program.</p>
 
 						</div>
-						<p>There is a cost to playing the magician if we are to not rely on the viewport to show/hide elements when we need them for any given scroll position. The more we explore alternative ways of maintaining a long-document illusion, the more we must think about nuanced positioning for which we are now responsible.</p>
 
-						<p>Perhaps that effort exceeds the savings in drawing hundreds of DOM nodes in a message stream. However, this exercise seeks to stretch the imagination a bit, and—perhaps it can lead to other interesting solutions for experiences with the ever-growing lists we now consume.</p>
 					</aside>
+
+					<p>There is a cost to playing the magician if we are to not rely on the viewport to show/hide elements when we need them for any given scroll position. The more we explore alternative ways of maintaining a long-document illusion, the more we must think about nuanced positioning for which we are now responsible.</p>
+
+					<p>Perhaps that effort exceeds the savings in drawing hundreds of DOM nodes in a message stream. However, this exercise seeks to stretch the imagination a bit, and—perhaps it can lead to other interesting solutions for experiences with the ever-growing lists we now consume.</p>
 				</section>
 				<section class="section-block col-lg-8 col-10 offset-1 offset-lg-2">
 					<h2>DOM Elements Dance</h2>
@@ -209,7 +212,7 @@
 
 					<h3>Dynamic Heights</h3>
 					<aside class="row example-row">
-						<div class="col-lg-6 offset-lg-1 offset-md-3 col-sm-6 offset-sm-3 col-7 offset-4 message-block message-block-dynamic-heights" data-count="3"></div>
+						<div class="col-lg-6 offset-lg-1 offset-md-3 col-sm-6 offset-sm-3 col-9 offset-3 message-block message-block-dynamic-heights" data-count="3"></div>
 						<div class="col-lg-5 col-12 vertically-centered">
 							<p> Since we must replace empty space created by removed nodes with each swap operation. We know that our message will be at least some minimum height—with padding, image, name, these values will rarely need to change. What we don't know is how long the content will stretch a single message.</p>
 
@@ -225,8 +228,8 @@
 							<p>Suppose we start with a smaller viewport and scroll our document a few iterations. We resize to a wider viewport and scroll back up. The previously accumulated sentinel height will now be larger per-message since the smaller viewport was skinnier—pushing message content, and by extension, the entire message height. So, when we operate on the new, wider and shorter state, we subtract less than we should from our sentinel.</p>
 						</div>
 						<div class="row">
-							<div class="col-md-5 offset-md-1 col-7 offset-4 message-block" data-count="3"></div>
-							<div class="col-md-4 offset-md-2 col-6 offset-4 message-block message-block-dynamic-heights-compare" data-count="3"></div>
+							<div class="col-md-5 offset-md-1 col-8 offset-3 message-block" data-count="3"></div>
+							<div class="col-md-4 offset-md-2 col-7 offset-3 message-block message-block-dynamic-heights-compare" data-count="3"></div>
 						</div>
 					 </aside>
 					 <aside class="row example-row">
@@ -410,10 +413,14 @@
 				</div>
 			</div>
 		</section>
-		<section id="debug-panel" class="debug-panel">
+		<section id="debug-panel" class="debug-panel vertically-centered">
+			<div class="backdrop"></div>
 			<span>Automated Scroll!</span><br>
-			<button class="scroll up">down</button>
-			<button class="scroll down">up</button>
+			<div class="row">
+				<button class="scroll up">down</button>
+				<button class="scroll down">up</button>
+			</div>
+
 		</section>
 	</main>
 	<!-- vendor -->

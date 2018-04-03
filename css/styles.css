@@ -56,8 +56,37 @@ table * {
     padding-top: 40px;
 }
 
-.example-row {
-	/*padding-bottom: 40px;*/
+.debug-panel{
+	opacity: 0;
+	position: fixed;
+	top: 100px;
+	margin-left: 100px;
+}
+
+.debug-panel button{
+	border-radius: 3px;
+	background-color: #ffffff;
+	border-color: #485052;
+	color: #555963;
+}
+
+.debug-panel button:hover{
+	cursor: pointer;
+	background-color: #a3bfc5;
+}
+
+.debug-panel .up{
+	margin-right: 10px;
+}
+
+.debug-panel .backdrop {
+	position: absolute;
+	background-color: #e7ebef;
+	padding: 50px 100px 50px 100px;
+	box-shadow: 0px 0px 20px #787A7B;
+	transform: translateZ(-100px);
+	z-index: -1;
+	border-radius: 5px;
 }
 
 .footer{
@@ -87,7 +116,6 @@ table * {
 
 .message-block-dynamic-heights {
 	min-height: 753px;
-	padding-bottom: 20px;
 }
 
 .message-block-dynamic-heights-compare {

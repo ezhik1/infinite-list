@@ -18,7 +18,7 @@ function MessageStream( domElement, Utils ){
 	}
 
 	//-- API
-	this.static            = false;        // When enabled, will serve messages statically ( simulated server call ), as opposed to server fetch
+	this.static            = true;        // When enabled, will serve messages statically ( simulated server call ), as opposed to server fetch
 	this.URL               = '/messages'; // base url for message requests
 	this.domElementLimit   = 30;          // Buffer of messages. Should be divisible by three (3) as swaps are made by moving last third to first third of the available dom element group
 	this.fetchLimit        = this.domElementLimit / 3; // general fetch of 1/3 total dom elements, to replace bottom or top third
