@@ -7,6 +7,7 @@ Necessary packages are included; requires to start node server from project dire
 $ nodemon server.js
 
 A live version of this detailed writeup / exercise can be found [here](#):
+
 Brute Force Approach:
 
 Core functionality depends on supplying a new DOM node for each datum retrived in the messages api; this leads to
