@@ -468,7 +468,10 @@ MessageStream.prototype.easeMessageToPosition = function( element, index ){
 //-- Guarantee Messages are fetched as user scrolls closer to end of view buffer
 MessageStream.prototype.handleMessagesContinuity = function( e ){
 	this.updateViewportInfo();
-	this.debugToggle();
+
+	if( this.debugPanel ){
+		this.debugToggle();
+	}
 
 	//-- wait until removed elements are replaced before advancing scrollQueue
 	if( this.swipeQueue.isRunning || this.viewBuffer === this.viewBufferOld ){ return }
