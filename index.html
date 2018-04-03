@@ -347,7 +347,7 @@
 					<ul>
 						<li>We're already looping through our messages, so we can push to an array with message contents and any other meaningful attributes about it—replacing said info from the cached array on subsequent swaps. So, in the same operation, we simply check to see if the message is already available, and populate data from the cache, rather than sending off another XHR.</li>
 
-						<li>We can extend the reach and power of our cache to utilise robust search by relying on cached data, rather than server-side look-ups. So, where a robust lookup may take longer to fulfill, a similar algorithm can be executed clientside with the already-available data. <i>This is more about how much we can do with less nodes/server calls for what usually comes up in later iterations of a component like our dynamic list</i></li>
+						<li>We can extend the reach and power of our cache to utilise robust search by relying on cached data, rather than server-side look-ups. So, where a robust lookup may take longer to fulfill, a similar algorithm can be executed clientside with the already-available data. <i>Whether this is actually true becomes evident in future iterations of a tool like our dynamic list</i>.</li>
 					</ul>
 
 					<p>The above satisfy server load concerns, but what about user experiences in slow-internet conditions. The state of mobile Internet in the very country that invented it can be—slow. At least for our scope, a set of messages is usually a very small amount of data. However, user avatars, gifs, images, and other engaging content can amount to more expense.</p>
@@ -374,9 +374,9 @@
 
 					<p>Furthermore, the whizzing motion of the tombstone demonstrates motion in general—exactly what a spinner is meant to accomplish. Where the latter is simply a visual cue that some request is being fulfilled, the former is interactive and can delegate multiple requests, with more granularity to changes in direction, speed, and precision.</p>
 
-					<p>This construct not only maintains continuity in the actual visual sensation we get from scrolling, but also allows for a more robust search when we those messages finally resolve to data. Where the former allows the user to actually associate their actions with instantaneous feedback of a scrolling list of elements, the latter opens up possibilities in search that are oft ill-represented in search/filter applications.</p>
+					<p>This construct not only maintains continuity in the visual sensation we get from scrolling, but also allows for a more robust search when those messages finally resolve to data. Where the former allows the user to actually associate their actions with instantaneous feedback of a scrolling list of elements, the latter opens up possibilities in search that are often ill-represented in search/filter applications.</p>
 
-					<p>When we search our list, we usually recall a few words, and hope to find those words in a message we or someone else mentioned in the last couple days. So instead of waiting for a single set to be retrieved, we retrieve several sets with a continuous gesture, and then go <i>jazz-hands</i> on the search bar. In fact, this style of <i>fetch a bunch—search when done</i> dynamic can allow us to quickly realize what it is we want from the list. The eventual search can then programmatically scroll us right over to the message(s) we are hoping to find.</p>
+					<p>When we search our list, we usually recall a few words, and hope to find those words in a message we or someone else mentioned in the last couple days. So instead of waiting for a single set to be retrieved, we retrieve several sets with a continuous gesture, and then go <i>jazz-hands</i> on the search bar. In fact, this style of <i>fetch a bunch—search when done</i> dynamic can allow us to quickly realize what it is we want from the list. The eventual search operation can then programmatically scroll us right over to the message(s) we are hoping to find.</p>
 
 					<p>These are simply ideas for the direction a project like this would go; After some thought, implementing tombstones by resolving a <code>Promise</code> bound to some DOM element is likely just the simple case. Were we to scroll past a few swap operations, the node to which we would resolve our data would already have been swapped and may be in a different place entirely. We would need more logic to dismiss the promised data and populate from the relevant request. That is not to say this is impossible!</p>
 
@@ -388,7 +388,7 @@
 				<div class="section-block col-lg-8 col-10 offset-1 offset-lg-2">
 					<h2>All Together Now!</h2>
 
-					<p>Below you'll find the full implementation of this little dance of DOM elements. Be sure to try and break it, scrolling as fast as possible and swiping to dismiss messages all at once! Pulling up dev tools will reveal how things are being swapped. Source code can be found <a href="#">here.</a></p>
+					<p>Below you'll find the full implementation of this little dance of DOM elements. Be sure to try and break it, scrolling as fast as possible and swiping to dismiss messages all at once! Pulling up dev tools will reveal how things are being swapped. Source code, and suggestions are welcome on GitHub can be found <a href="#">here.</a></p>
 
 					<p>I am confident that there is efficiency to be brought to long-document scrolling experiences. This may be exotic, or not exotic enough, to actually leverage the best possible performance and usability, but I do believe it helps to re-frame classic constructs in our documents.</p>
 
