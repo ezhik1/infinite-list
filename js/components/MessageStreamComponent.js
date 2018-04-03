@@ -280,7 +280,7 @@ MessageStream.prototype.generateMarkup = function( opts, callback ){
 
 		var message   = opts.data.messages[ i ];
 		var user      = message.author.name; //'Jack Dawson ';
-		var image     = this.static ? '/images' + message.author.photoUrl : '/images' + encodeURIComponent( message.author.photoUrl ); //images/user.png
+		var image     = this.static ? 'images' + message.author.photoUrl : '/images' + encodeURIComponent( message.author.photoUrl ); //images/user.png
 		var timeStamp = this.Utils.timeSince( message.updated ) + ' ago'; //'10 minutes ago';
 		var content   = message.content; //'Just the other day, the ship seemed to go about in just the strangest manner.'
 
