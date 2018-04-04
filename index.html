@@ -18,7 +18,7 @@
 	<main>
 		<section class="container-fluid write-up">
 			<header class="row">
-				<div class="section-block col-lg-8 col-10 offset-1 offset-lg-2">
+				<div class="section-block col-lg-8 col-12 offset-lg-2">
 					<h1>Scrolls: Unraveled</h1>
 					<aside class="row example-row intro-paragraph">
 
@@ -92,7 +92,7 @@
 				</div>
 			</header>
 			<article class="row">
-				<section class="section-block col-lg-8 col-10 offset-1 offset-lg-2">
+				<section class="section-block col-lg-8 col-12 offset-lg-2">
 					<h2>A Long List need not actually be Long</h2>
 
 					<aside class="row example-row">
@@ -129,7 +129,7 @@
 
 					<p>Perhaps that effort exceeds the savings in drawing hundreds of DOM nodes in a message stream. However, this exercise seeks to stretch the imagination a bit, and—perhaps it can lead to other interesting solutions for experiences with the ever-growing lists we now consume.</p>
 				</section>
-				<section class="section-block col-lg-8 col-10 offset-1 offset-lg-2">
+				<section class="section-block col-lg-8 col-12 offset-lg-2">
 					<h2>DOM Elements Dance</h2>
 					<aside class="row example-row">
 						<div class="col-lg-4 offset-lg-2 push-lg-6 col-md-6 offset-md-3 col-sm-6 offset-sm-3 col-7 offset-4 message-block" data-count="1"></div>
@@ -161,7 +161,7 @@
 
 					<p>As luck would have it, we do know the height of our swapped messages. Since we're iterating through those swapped blocks of messages, we can also keep track of the overall height lost, and figure out a simple way to keep our document afloat as we scroll further down.</p>
 				</section>
-				<section class="section-block col-lg-8 col-10 offset-1 offset-lg-2">
+				<section class="section-block col-lg-8 col-12 offset-lg-2">
 					<h2>Sentinels!</h2>
 
 					<aside class="row example-row">
@@ -205,7 +205,7 @@
 					<p>Surprisingly, that should cover basic scrolling through long lists of messages. With relatively little effort we can shuffle a handful of elements, quite quickly, and with no sight of edges of the smoke and mirrors involved.</p>
 
 				</section>
-				<section class="section-block col-lg-8 col-10 offset-1 offset-lg-2">
+				<section class="section-block col-lg-8 col-12 offset-lg-2">
 					<h2>Optimizations and Further Implications</h2>
 
 					<p>The aforementioned cost presents itself to be paid in this section. We're not just scrolling through a long document of infinitely-added elements. We divide a fixed set of elements, introduce states of transition, and rely on correct arithmetic to choreograph our messages to dance in unison. JavaScript, waving its best flag, gives us flexibility and smoothness in its async execution, but that manifests itself in quite the unexpected behaviour.</p>
@@ -258,7 +258,7 @@
 							<p>When we say we <i>queue up</i> a song, we really just wish for it to play, but the mechanism is responsible for fulfilling that request. Similarly, we can assign a set of messages to be swiped and swapped to a Queue function, which will then appropriately shepherd our messages, in-order, and guarantee a swapping, swapped, finished set of states. During those states, we can accumulate another set of requests, swipes, which can be executed once our swipes are completed.</p>
 						</div>
 
-						<figure class="image gif queue-gif col-lg-5 offset-lg-1 col-10 offset-1">
+						<figure class="image gif queue-gif col-lg-5 offset-lg-1 col-12">
 							<img src="images/queue.gif" alt="Angry Queue">
 							<figcaption class="text-center"><i>An Impatient Bean</i></figcaption>
 						</figure>
@@ -336,7 +336,7 @@
 
 					<h3>Network Optimizations:</h3>
 					<aside class="row example-row">
-						<figure class="image gif latency-gif col-lg-5 col-md-5 offset-md-0 col-10 offset-1">
+						<figure class="image gif latency-gif col-lg-5 col-md-5 offset-md-0 col-12">
 							<img src="images/latency.gif" alt="“ Oh dear ! Oh dear ! I shall be too late!">
 						</figure>
 
@@ -362,9 +362,9 @@
 						</figure>
 					</aside>
 					<aside class="row example-row">
-						<p class="col-12">Nonsense! From memory, we know our message will all share at least form, and some recyclable elements. We can generalize a message to look a bit like this:</p>
+						<p class="col-12">Nonsense! From memory, we know our messages will all share at least form, and some recyclable elements. We can generalize a message to look a bit like this:</p>
 
-						<div class="col-md-5 offset-md-0 col-10 offset-1">
+						<div class="col-md-5 offset-md-0 col-12">
 							<div class="tombstone-stack" data-count='3'></div>
 						</div>
 
@@ -385,7 +385,7 @@
 		</section>
 		<section class="container-fluid introduce-main-demo">
 			<header class="row">
-				<div class="section-block col-lg-8 col-10 offset-1 offset-lg-2">
+				<div class="section-block col-lg-8 col-12 offset-lg-2">
 					<h2>All Together Now!</h2>
 
 					<p>Below you'll find the full implementation of this little dance of DOM elements. Be sure to try and break it, scrolling as fast as possible and swiping to dismiss messages all at once! Pulling up dev tools will reveal how things are being swapped. Source code, and suggestions are welcome on GitHub can be found <a href="#">here.</a></p>
