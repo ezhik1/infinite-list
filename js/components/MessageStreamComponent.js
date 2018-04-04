@@ -1,12 +1,13 @@
 function MessageStream( domElement, Utils ){
 
 	//-- Variable State Values
-	this.viewBuffer     = 0; // a function of the domElement offsetHeight;
-	this.viewBufferOld  = 0; // updates on an exceeded viewbuffer
+	this.topThirdElementPosition    = 0; // used for upper bound before swapping nodes
+	this.bottomThirdElementPosition = 0; // used for lower bound before swapping nodes
 	this.domElementPageLocation = Utils.elementOffsetTop( domElement ); // set from wherever message component is on page
 	this.documentHeight         = 0; // updates on viewport size change
 	this.domElementWidth        = 0; // updates on viewport size change
 	this.oldScrollY             = 0; // updates on scroll
+	this.currentScroll 			= 0; // updates on scroll
 	this.lastScrollDirection    = null; // 'up' 'down' or 'null'
 
 	//-- Thresholds and Default Values
@@ -78,17 +79,28 @@ MessageStream.prototype.onWindowResize = function(){
 	this.updateViewportInfo();
 }
 
+MessageStream.prototype.updateElementPositions = function(){
+
+	var topEl = this.domInterface.collection[ Math.floor( this.domInterface.collection.length / 3 ) - 1 ];
+	var bottomEl = this.domInterface.collection[ Math.floor( this.domInterface.collection.length * 0.66) - 1 ];
+	var winHeight = window.innerHeight;
+
+	this.topThirdElementPosition =   topEl.getBoundingClientRect().bottom - winHeight;
+	this.bottomThirdElementPosition = bottomEl.getBoundingClientRect().top - winHeight;
+}
+
 //-- Update viewport size and viewBuffer
 MessageStream.prototype.updateViewportInfo = function(){
 	this.documentHeight    = Math.max( document.documentElement.clientHeight, window.innerHeight || 0 );
 	this.documentWidth     = Math.max( document.documentElement.clientWidth, window.innerWidth || 0 );
 	this.domElementWidth   = Math.max( this.domElement.clientWidth, this.domElement.innerWidth || 0 );
 	this.domElementPageLocation = this.Utils.elementOffsetTop( this.domElement );
-	this.viewBuffer        = Math.max( ( this.domElementPageLocation + this.domElement.offsetHeight ) - ( this.documentHeight * 3 )  , 0 );
+	this.currentScroll = window.scrollY;
 }
 
 MessageStream.prototype.setupEventListeners = function(){
 	//-- setup scroll listener to handle fetching more messages
+
 	window.addEventListener( 'scroll', this.handleMessagesContinuity.bind( this ) );
 
 	//-- setup scroll listener to recalculate heights/widths and view buffer on resize
@@ -349,8 +361,9 @@ MessageStream.prototype.reuseDomNodes = function( opts, callback ){
 
 			//-- normal message swap: add on to offset to account for the removed space
 			//-- removed message: the occupied space will not need to be removed on scrollback, as the element is removed forever
+
 			if( opts.type === null ){
-				forwardOffset += element.offsetHeight;
+				forwardOffset += element.offsetHeight + parseInt( window.getComputedStyle( element ).marginTop );
 			}
 			//-- remove from 0 index for groups of messages, or from specific index for single replacements
 			this.domInterface.collection.splice( opts.replaceFromIndex , 1 );
@@ -411,7 +424,7 @@ MessageStream.prototype.reuseDomNodes = function( opts, callback ){
 			this.domInterface.collection.pop();
 
 			//-- keep track of how much the sentinel will need to shrink
-			reverseOffset +=  this.domInterface.collection[ 0 ].offsetHeight;
+			reverseOffset +=  this.domInterface.collection[ 0 ].offsetHeight + parseInt( window.getComputedStyle( this.domInterface.collection[ 0 ] ).marginTop );;
 
 			//-- update index attribute by message id, to preserve swapability even when messages have been removed
 			this.domInterface.collection[ 0 ].setAttribute( 'data-id', this.domInterface.collection[ 0 ].firstChild.dataset.id );
@@ -419,10 +432,9 @@ MessageStream.prototype.reuseDomNodes = function( opts, callback ){
 
 		this.sentinel.trackedHeight -= reverseOffset;
 		//-- something didnt reduce to zero: a message(s) has been skipped when reordering.
-		//-- TODO: scrolling 'way' too fast seems to skip entire swap cycles ( inference; could be confounded by cached message retrieval,
-		//-- scroll event order, or re-sort on swipe-to-remove message ) failing to account for the needed message replace amount. This can be somehow calculated and resolved; for now, just guarantee 0 state.
 		if( this.sentinel.trackedHeight < 0 ){
 			console.warn( 'Calculation fault! A message(s) was skipped on reverse swap, or viewport has changed between swap operations.\n\tHeight delta, whitespace added - removed ( on scroll and swap ) must resolve to 0.\n\tCalculated ∆: ', this.sentinel.trackedHeight, 'px');
+			// bail on bad sentinel height
 			this.sentinel.trackedHeight = 0;
 			console.warn( 'resetting to: ', this.sentinel.trackedHeight, 'px' );
 		}
@@ -439,7 +451,7 @@ MessageStream.prototype.reuseDomNodes = function( opts, callback ){
 	}
 
 	//-- set scroll position here to give the reordered state a chance to report correct scroll position
-	this.oldScrollY = window.scrollY//Math.max( window.scrollY - this.domElementPageLocation, 0);
+	this.oldScrollY = window.scrollY
 }
 
 //-- Append Message elements to their target container
@@ -467,17 +479,15 @@ MessageStream.prototype.easeMessageToPosition = function( element, index ){
 
 //-- Guarantee Messages are fetched as user scrolls closer to end of view buffer
 MessageStream.prototype.handleMessagesContinuity = function( e ){
-	this.updateViewportInfo();
 
-	if( this.debugPanel ){
-		this.debugToggle();
-	}
+	this.updateViewportInfo();
+	this.updateElementPositions();
 
 	//-- wait until removed elements are replaced before advancing scrollQueue
-	if( this.swipeQueue.isRunning || this.viewBuffer === this.viewBufferOld ){ return }
+	if( this.swipeQueue.isRunning ){ return }
 
 
-	var currentScroll = window.scrollY;
+	var currentScroll = this.currentScroll;
 	var scroll = null;
 
 	//-- DOWN
@@ -497,11 +507,11 @@ MessageStream.prototype.handleMessagesContinuity = function( e ){
 
 	var conditions = {
 		forward : {
-			p : currentScroll > this.viewBuffer, // reached view buffer ( bottom 1/3 of doc )
+			p : this.bottomThirdElementPosition < 0,// reached view buffer; bottom third of the message stream
 			q : scroll === 'down'                // scrolling down
 		},
 		reverse : {
-			p : currentScroll < this.sentinel.domElement.offsetHeight + this.domElementPageLocation + ( this.domElement.offsetHeight / 3 ), // at the top third of the doc height
+			p : this.topThirdElementPosition > 0, // at the top third of the message stream
 			q : this.domInterface.fetchReverseIndex > 0, // there are still messages to be loaded in the reverse direction
 			r : scroll === 'up'                         // scrolling up
 		}
@@ -509,9 +519,6 @@ MessageStream.prototype.handleMessagesContinuity = function( e ){
 
 	//--  FORWARD DIRECTION : Scrolled to threshold - fetch more messages
 	if( conditions.forward.p && conditions.forward.q ) {
-
-		//-- prevent unwanted scroll position / viewBuffer equivalence while buffer is updated;
-		this.viewBufferOld = this.viewBuffer;
 
 		//-- cached messages available ( not guaranteed to be all, as we may have removed some that will need fresh fetching)
 		if( this.domInterface.fetchForwardIndex < this.domInterface.cachedMessages.length ){
@@ -530,7 +537,6 @@ MessageStream.prototype.handleMessagesContinuity = function( e ){
 	//-- REVERSE DIRECTION : scroll position is less than available message stream height, relative to sentinel offset
 	if( conditions.reverse.p && conditions.reverse.q && conditions.reverse.r ){
 
-		this.viewBufferOld = 0;
 		run = function(){
 			this.reuseDomNodes({ direction: 'reverse' });
 		}

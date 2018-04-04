@@ -1,8 +1,9 @@
+	var watchedElements = [];
 function init(){
 
 	var domElement = document.getElementById( 'message-stream' );
 	var Utils        = new UTILS();
-	var watchedElements = [];
+
 
 	// high level demo streams
 	var animatedMessageElements = document.querySelectorAll('.message-animation');

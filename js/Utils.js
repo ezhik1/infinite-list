@@ -127,10 +127,9 @@ var UTILS = function(){
 	}
 
 	this.elementOffsetTop = function( element ) {
-		var rect = element.getBoundingClientRect(),
-		//scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-		scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-		//return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+		var rect = element.getBoundingClientRect();
+
+		var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
 		return rect.top + scrollTop;
 	}
