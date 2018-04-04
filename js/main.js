@@ -1,4 +1,4 @@
-	var watchedElements = [];
+
 function init(){
 
 	var domElement = document.getElementById( 'message-stream' );
