@@ -6,7 +6,7 @@ Necessary packages are included; requires to start node server from project dire
 
 ```$ nodemon server.js```
 
-A live version of this detailed writeup / exercise can be found [here](#):
+A live version of this detailed writeup / exercise can be found [here](https://panchenko.neocities.org/infinite-list/):
 
 ## Brute Force Approach:
 
