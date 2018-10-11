@@ -9,13 +9,13 @@ function MessageStream( domElement, Utils ){
 	this.oldScrollY             = 0; // updates on scroll
 	this.currentScroll 			= 0; // updates on scroll
 	this.lastScrollDirection    = null; // 'up' 'down' or 'null'
+	this.marginOffset 			= 0 // updates on viewport size change
 
 	//-- Thresholds and Default Values
 	this.swipeDirection = -1;          // [INTEGER] 1: swipe left to dismiss -1: swipe right to dismiss
 	this.animationDurations = {
 		swipeOutOfView:          1000, // [MILLISECONDS]
 		returnToInitialPosition: 500,  // [MILLISECONDS]
-
 	}
 
 	//-- API
@@ -54,7 +54,6 @@ function MessageStream( domElement, Utils ){
 	this.easeMessageToPosition = this.easeMessageToPosition.bind( this );
 	this.reuseDomNodes         = this.reuseDomNodes.bind( this );
 
-	//-- a set of useful functions
 	this.Utils = Utils;
 	this.scrolling = false; // debug for auto scroll
 
@@ -67,10 +66,10 @@ MessageStream.prototype.initialize = function(){
 		this.staticServer = new StaticDataServer();
 	}
 
-	this.updateViewportInfo();
 	this.setupEventListeners();
 	this.setupQueues();
 	this.fetchMessages({ limit: this.domElementLimit });
+	this.updateViewportInfo();
 
 
 }
@@ -95,7 +94,7 @@ MessageStream.prototype.updateViewportInfo = function(){
 	this.documentWidth     = Math.max( document.documentElement.clientWidth, window.innerWidth || 0 );
 	this.domElementWidth   = Math.max( this.domElement.clientWidth, this.domElement.innerWidth || 0 );
 	this.domElementPageLocation = this.Utils.elementOffsetTop( this.domElement );
-	this.currentScroll = window.scrollY;
+	this.marginOffset = parseInt( window.getComputedStyle( this.domInterface.collection[ 0 ] ).marginTop );
 }
 
 MessageStream.prototype.setupEventListeners = function(){
@@ -169,8 +168,8 @@ MessageStream.prototype.fetchMessages = function( opts ){
 	}
 
 	if( opts ){
-
-		//-- specific limit passed : initial load should be this.domElementLimit, and 1/3 of that value ( captured in this.fetchLimit ) for subsequent requests
+		//-- specific limit passed : initial load should be this.domElementLimit,
+		//-- and 1/3 of that value ( captured in this.fetchLimit ) for subsequent requests
 		if( opts.limit ){
 			request.limit = opts.limit
 		}
@@ -201,8 +200,8 @@ MessageStream.prototype.fetchMessages = function( opts ){
 			json = JSON.parse( data );
 		}
 
-		this.token      = json.pageToken;
-		request.data    = json;
+		this.token = json.pageToken;
+		request.data = json;
 		request.direction = 'forward';
 
 		//-- cached message, create markup from template and store data in cachedMessages
@@ -238,7 +237,7 @@ MessageStream.prototype.fetchMessages = function( opts ){
 
 MessageStream.prototype.staticFetch = function( limit, callback ){
 
-	data = this.staticServer.GET( this.token );
+	data = this.staticServer.GET( limit, this.token );
 
 	if( data ){
 		callback( data );
@@ -291,7 +290,7 @@ MessageStream.prototype.generateMarkup = function( opts, callback ){
 	for( var i = 0; i < len; i++ ){
 
 		var message   = opts.data.messages[ i ];
-		var user      = message.author.name; //'Jack Dawson ';
+		var user      = message.author.name; //'Jack Dawson';
 		var image     = this.static ? 'images' + message.author.photoUrl : '/images' + encodeURIComponent( message.author.photoUrl ); //images/user.png
 		var timeStamp = this.Utils.timeSince( message.updated ) + ' ago'; //'10 minutes ago';
 		var content   = message.content; //'Just the other day, the ship seemed to go about in just the strangest manner.'
@@ -360,10 +359,11 @@ MessageStream.prototype.reuseDomNodes = function( opts, callback ){
 			var element = this.domInterface.collection[ opts.replaceFromIndex ];
 
 			//-- normal message swap: add on to offset to account for the removed space
-			//-- removed message: the occupied space will not need to be removed on scrollback, as the element is removed forever
+			//-- removed message: the occupied space will not need to be removed on scrollback,
+			//-- as the element is removed forever
 
 			if( opts.type === null ){
-				forwardOffset += element.offsetHeight + parseInt( window.getComputedStyle( element ).marginTop );
+				forwardOffset += element.offsetHeight + this.marginOffset;
 			}
 			//-- remove from 0 index for groups of messages, or from specific index for single replacements
 			this.domInterface.collection.splice( opts.replaceFromIndex , 1 );
@@ -424,7 +424,7 @@ MessageStream.prototype.reuseDomNodes = function( opts, callback ){
 			this.domInterface.collection.pop();
 
 			//-- keep track of how much the sentinel will need to shrink
-			reverseOffset +=  this.domInterface.collection[ 0 ].offsetHeight + parseInt( window.getComputedStyle( this.domInterface.collection[ 0 ] ).marginTop );;
+			reverseOffset += this.domInterface.collection[ 0 ].offsetHeight + this.marginOffset;
 
 			//-- update index attribute by message id, to preserve swapability even when messages have been removed
 			this.domInterface.collection[ 0 ].setAttribute( 'data-id', this.domInterface.collection[ 0 ].firstChild.dataset.id );
@@ -479,7 +479,7 @@ MessageStream.prototype.easeMessageToPosition = function( element, index ){
 
 //-- Guarantee Messages are fetched as user scrolls closer to end of view buffer
 MessageStream.prototype.handleMessagesContinuity = function( e ){
-
+	this.currentScroll = window.scrollY;
 	this.updateViewportInfo();
 	this.updateElementPositions();
 
@@ -525,7 +525,6 @@ MessageStream.prototype.handleMessagesContinuity = function( e ){
 			run = function(){
 				this.reuseDomNodes({ direction: 'forward', cachedMessagesAvailable: true });
 			};
-
 		}else{
 		//-- fetch a new set from api
 			run = function(){
@@ -547,6 +546,7 @@ MessageStream.prototype.handleMessagesContinuity = function( e ){
 		this.scrollQueue.add({ target: request, condition: 'completed', run: run.bind( this ) });
 		request.completed = true;
 	}
+
 	this.checkContinuity();
 	this.scrollQueue.run();
 }
@@ -684,12 +684,15 @@ MessageStream.prototype.reorderRemovedElement = function( domElement ){
 			replaceToIndex: this.domInterface.fetchForwardIndex,
 			replaceFromIndex: replaceFromIndex,
 		});
-		//--we want to fetch forward one message to the cached array, to offset the removed element and avoid not having enough when we restore messages from cache on scroll events
+		//--we want to fetch forward one message to the cached array,
+		// to offset the removed element and avoid not having enough when
+		// we restore messages from cache on scroll events
 		this.fetchMessages({ type: 'oneMessageToCache' });
 	}else{
 		//-- no cached messages available, fetch one new entry from API at current fetchForward Index
 		this.fetchMessages({ type: 'oneMessage', replaceFromIndex: replaceFromIndex, domElement: domElement });
 	}
+
 }
 
 MessageStream.prototype.returnToInitialPosition = function( domElement, position ){
