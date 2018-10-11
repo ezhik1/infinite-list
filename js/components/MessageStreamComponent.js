@@ -9,7 +9,8 @@ function MessageStream( domElement, Utils ){
 	this.oldScrollY             = 0; // updates on scroll
 	this.currentScroll 			= 0; // updates on scroll
 	this.lastScrollDirection    = null; // 'up' 'down' or 'null'
-	this.marginOffset 			= 0 // updates on viewport size change
+	this.marginOffset 			= 0; // updates on viewport size change
+	this.swipeOutThreshold 		= 0; // updates on viewport size change
 
 	//-- Thresholds and Default Values
 	this.swipeDirection = -1;          // [INTEGER] 1: swipe left to dismiss -1: swipe right to dismiss
@@ -69,9 +70,6 @@ MessageStream.prototype.initialize = function(){
 	this.setupEventListeners();
 	this.setupQueues();
 	this.fetchMessages({ limit: this.domElementLimit });
-	this.updateViewportInfo();
-
-
 }
 
 MessageStream.prototype.onWindowResize = function(){
@@ -95,6 +93,7 @@ MessageStream.prototype.updateViewportInfo = function(){
 	this.domElementWidth   = Math.max( this.domElement.clientWidth, this.domElement.innerWidth || 0 );
 	this.domElementPageLocation = this.Utils.elementOffsetTop( this.domElement );
 	this.marginOffset = parseInt( window.getComputedStyle( this.domInterface.collection[ 0 ] ).marginTop );
+	this.swipeOutThreshold = this.domElementWidth / 3;
 }
 
 MessageStream.prototype.setupEventListeners = function(){
@@ -221,6 +220,7 @@ MessageStream.prototype.fetchMessages = function( opts ){
 
 		//-- initial load : create markup from template, with new nodes, and paint to dom
 		this.generateMarkup({ data: json, type: 'newDomNodes' }, function(){
+			this.updateViewportInfo();
 			//-- append markup to DOM container
 			this.paintMarkup();
 			this.activeAjaxRequest = false;
@@ -570,7 +570,6 @@ MessageStream.prototype.checkContinuity = function( ){
 //-- Swipe Events
 MessageStream.prototype.swipeHandler = function( domElement ){
 
-	var swipeOutThreshold = this.domElementWidth / 3;
 	var hammerOptions     = { preventDefault: true };
 	var hammer            = new Hammer( domElement, hammerOptions );
 
@@ -591,7 +590,7 @@ MessageStream.prototype.swipeHandler = function( domElement ){
 		if( this.swipeDirection * event.deltaX >= 1 ){ return }
 
 		//-- reached threshold, finish animation with outOfView
-		if( event.distance >= swipeOutThreshold && !domElement.swipingOutofView ){
+		if( event.distance >= this.swipeOutThreshold && !domElement.swipingOutofView ){
 			//-- stop listner to prevent phantom re-positiong ( ie. releasing mouse, which triggers hammer.on('pan',..) )
 			hammer.stop();
 
@@ -622,7 +621,7 @@ MessageStream.prototype.swipeHandler = function( domElement ){
 		if( this.swipeDirection * event.deltaX >= 1 ){ return }
 
 		//-- user swipe hasn't reached threshold, so return element to its initial position
-		if( event.distance < swipeOutThreshold  && !domElement.returningToInitPos && !domElement.swipingOutOfView ){
+		if( event.distance < this.swipeOutThreshold  && !domElement.returningToInitPos && !domElement.swipingOutOfView ){
 			domElement.returningToInitPos = true;
 			this.returnToInitialPosition( domElement, this.swipeDirection * event.deltaX );
 		}

@@ -75,18 +75,18 @@
 						</figure>
 
 						<div class="col-md-6 col-12">
-							<p>What about live feeds? The likes of YouTube, Facebook, Twitch, and others have taken to showcasing and engaging their users with live content in form of comment, vote, and reaction streams. The word, the little red dot, the somewhat tense feeling about this state-of-being invokes a sense of fleeting <i>now-ness</i> that many of us enjoy, hate, or otherwise find stimulating. We find it's analogues  in 'On-Air' signs, radio/television broadcasts, newspapers, and in so many other spoken and written forms. The euphoric feeling seems to come from actually seeing interaction—streams of dialogue, messages and comments whizzing through digital, metaphorical, or actual windows.</p>
+							<p>What about live feeds? The likes of YouTube, Facebook, Twitch, and others have taken to showcasing and engaging their users with live content in form of comment, vote, and reaction streams. The word, the little red dot, the somewhat tense feeling about this state-of-being invokes a sense of fleeting <i>now-ness</i> that many of us enjoy, hate, or otherwise find stimulating. We find its analogues  in 'On-Air' signs, radio/television broadcasts, newspapers, and in so many other spoken and written forms. The euphoric feeling seems to come from actually seeing interaction—streams of dialogue, messages and comments whizzing through digital, metaphorical, or actual windows.</p>
 						</div>
 
 					</aside>
 
-					<p>With each historical step towards presenting content, the delivery-method must be made equally pleasant! Live radio and television have been refined to wonderful levels of engagement for the audience they seek to inform; in similar fashion, our web application must make this effort anywhere we can justify it's efficacy.</p>
+					<p>With each historical step towards presenting content, the delivery-method must be made equally pleasant! Live radio and television have been refined to wonderful levels of engagement for the audience they seek to inform; in similar fashion, our web application must make this effort anywhere we can justify its efficacy.</p>
 
 					<p>Where the visual/auditory sensation of content-consumption seems most-rewarding, we should be thinking about making that delivery as fluid and natural as possible. Easing looks better than abrupt stops in animation because that's how most things work in real-life. This topic comes up a lot in physical mechanics, architecture, where actual things behave according to natural laws. More on the <a href="https://www.wired.com/2016/07/everything-harmonic-oscillator/" target="blank"><i>Everything is a Spring</i></a> topic can be found in plenty of articles on the Internet.<span class="alert">Disclaimer: a little bit of math and physics follow down that rabbit hole, but it's a really interesting topic.</span></p>
 
 					<p>The reason any of the math or physics involved in describing physical systems, is that we're replicating one in our browser. The window, viewport, or whatever we want to call it, displays list items. If we are to engage with this list in any way, it <i>should</i> behave the way, say, some wood blocks (messages) on an actual desktop (viewport) would move about the desktop's surface.</p>
 
-					<p>If we begin to display our messages with hesitation, the illusion of a physical system is lost, and we reveal the jagged edges of our simulation. It may seem trivial, a miniscule metric that even the user may fail to articulate meaningfully, but it does accumulate—the sour feeling from delayed, jagged, or slow-responding transitions are noticed. The way something <i> feels </i> goes quite a bit further for a useful system than just aesthetics. This, again, is worth thinking about, just not in this scope.
+					<p>If we begin to display our messages with hesitation, the illusion of a physical system is lost, and we reveal the jagged edges of our simulation. It may seem trivial, a miniscule metric that even the user may fail to articulate meaningfully, but it does accumulate—the sour feeling from delayed, jagged, or slow transitions is noticed. The way something <i> feels </i> goes quite a bit further for a useful system than just aesthetics. This, again, is worth thinking about, just not in this scope.
 
 					<p>Simply put, if our hardware cannot smoothly show an endless list of elements efficiently and consistently, we can attempt to re-frame the problem—hopefully without the never-ending list of DOM elements.</p>
 				</div>
@@ -97,7 +97,7 @@
 
 					<aside class="row example-row">
 
-						<p class="col-md-6 col-12">When we think of a long document with countless items, nodes, etc., it is impossible to ignore the repetition in form—and, it's absence in content. The contents of a list, generally, are unique—which is why we are moved to collect, compare, and differentiate between one or another item. To reign in the scope a bit, let's tackle the seemingly infinite list of comments we can surely find at the bottom, side, or front-and-center of a web application. Most everywhere I've looked, a comment appears, moves the rest out of the way, and the list goes on. Technically, it's merely adding, removing nodes to/from the relevant parent node. Although we can simply add and remove nodes, we can also do better.</p>
+						<p class="col-md-6 col-12">When we think of a long document with countless items, nodes, etc., it is impossible to ignore the repetition in form—and, its absence in content. The contents of a list, generally, are unique—which is why we are moved to collect, compare, and differentiate between one or another item. To reign in the scope a bit, let's tackle the seemingly infinite list of comments we can surely find at the bottom, side, or front-and-center of a web application. Most everywhere I've looked, a comment appears, moves the rest out of the way, and the list goes on. Technically, it's merely adding, removing nodes to/from the relevant parent node. Although we can simply add and remove nodes, we can also do better.</p>
 
 						<figure class="image gif long-list-gif col-lg-6 col-md-6 col-sm-12">
 							<img src="images/long-list.gif" alt="Long List">
@@ -178,7 +178,7 @@
 						<div class="col-lg-6 offset-lg-0 push-lg-6 col-md-6 offset-md-0 col-sm-12 col-12">
 							<h3>Scrolling Down</h3>
 
-							<p>A watchful, obedient program makes for a fine element at the top of our document. As we replace nodes, it's job is to keep track of the overall height of the replaced nodes and occupy any voids created by removed nodes.</p>
+							<p>A watchful, obedient program makes for a fine element at the top of our document. As we replace nodes, its job is to keep track of the overall height of the replaced nodes and occupy any voids created by removed nodes.</p>
 
 							<p> Since the height of any one message can vary—influenced only by the length of the message's content, we sum the height of all messages in the swap operation, and extend our sentinel's height by that amount.</p>
 
